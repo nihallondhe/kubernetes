@@ -1,0 +1,79 @@
+apiVersion: networking.k8s.io/v1
+
+kind: Ingress
+
+metadata:
+  annotations:
+     nginx.ingress.kubernetes.io/rewrite-target: /$1
+     nginx.ingress.kubernetes.io/use-regex: "true"
+     kubernetes.io/ingress.class: "nginx"
+     cert-manager.io/issuer: letsencrypt-nginx
+
+  name: ingress-host
+  namespace: wow-test
+    
+spec:
+  tls:
+  - hosts:
+    - micro.wowapp.tech
+    secretName: letsencrypt-nginx-echo
+
+  rules:
+
+  - host: micro.wowapp.tech
+
+    http:
+
+      paths:
+
+      - pathType: Prefix
+
+        path: "/home"
+
+        backend:
+
+          service:
+
+            name: wow-micro-service-notary-apis
+
+            port:
+
+              number: 80
+
+#  - host: dhan.tech
+
+#    http:
+
+#      paths:
+
+#      - pathType: Prefix
+
+ #       path: "/foo"
+
+  #      backend:
+
+   #       service:
+
+    #        name: wow-backend-kyc-service
+
+     #       port:
+
+      #        number: 80
+
+  #  http:
+
+   #   paths:
+
+    #  - pathType: Exact
+
+     #   path: "/home"
+
+      #  backend:
+
+       #   service:
+
+        #    name: wow-backend-kyc-service
+
+         #   port:
+
+          #    number: 80

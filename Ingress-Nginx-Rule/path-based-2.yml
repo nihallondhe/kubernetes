@@ -1,0 +1,42 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+#  annotations:
+#    nginx.ingress.kubernetes.io/app-root: /
+   annotations:
+    nginx.ingress.kubernetes.io/app-root: /
+    nginx.ingress.kubernetes.io/from-to-www-redirect: "true"
+    kubernetes.io/ingress.class: nginx
+    nginx.ingress.kubernetes.io/proxy-http-version: "1.0"
+    nginx.ingress.kubernetes.io/enable-rewrite-log: "true"
+    nginx.ingress.kubernetes.io/rewrite-target: /$1
+    nginx.ingress.kubernetes.io/use-regex: "true"
+#   name: rootss
+
+   name: approot2
+   namespace: wow-test
+spec:
+  ingressClassName: nginx
+  rules:
+  - host: users.wowapp.tech
+    http:
+      paths:
+      - path: "/user"
+        pathType: Prefix
+        backend:
+          service:
+            name: wow-backend-user
+            port: 
+              number: 80
+#" | kubectl create -f -
+
+
+# host: users.wowapp.tech
+    
+      - path: "/notary"
+        pathType: Prefix
+        backend:
+          service:
+            name: wow-micro-service-notary-apis
+            port:
+              number: 80
